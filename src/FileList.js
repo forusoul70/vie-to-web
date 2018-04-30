@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios'
+import FolderList from './FolderList';
 import './FileList.css';
 import $ from 'jquery';
 
@@ -18,26 +20,38 @@ function addTorrent(url) {
     return axios.post('/torrent', data, null)
 }
 
+function deleteTorrent(hash) {    
+    return axios.delete('/torrent/' + hash)
+}
+
 class FileListItem extends Component {
     constructor(props) {
-        super(props)        
+        super(props)
+        console.info(props.parent)
     }
 
     render() {
         let model = this.props.torrentModel
-        var description
+        let parent = this.props.parent
+        var deleteButton = (
+            <button onClick={this.props.deleteTorrentClickedListener.bind(parent, model)}>지우기</button>
+        )
+    
+        var description        
         if (model.status === "Downloading") {
             description = (            
-                <li>
+                <li onClick={this.props.itemClickedListener.bind(parent, model)}>
                     <h3>{model.name}</h3> 
                     <p>{model.progress}</p>                       
+                    {deleteButton}
                 </li>
             )
         } else {
             description = (            
-                <li>
+                <li onClick={this.props.itemClickedListener.bind(parent, model)}>
                     <h3>{model.name}</h3> 
                     <p>{model.status}</p>                       
+                    {deleteButton}
                 </li>
             ) 
         }
@@ -57,7 +71,8 @@ class FileList extends Component {
         this.loadFileList()
     }
 
-    render() {        
+    render() {  
+        let self = this      
         return (
             <div>
                 <header className="App-header">
@@ -65,10 +80,13 @@ class FileList extends Component {
                 </header>
                 <ul className="File-list">
                     {this.state.fileList.map((item) =>                         
-                        <FileListItem key={item.id} torrentModel={item}/>
+                        <FileListItem key={item.id} torrentModel={item} 
+                            parent={self}
+                            itemClickedListener={this.onItemClicked}
+                            deleteTorrentClickedListener={this.onItemDeleteClicked}/>
                     )}                    
                 </ul>
-                <input type="file" id="file-selector" onChange={this.onUploadRequest}/>   
+                <input type="file" id="file-selector" onChange={this.onUploadRequest.bind(this)}/>   
             </div>
         )
     }
@@ -93,19 +111,33 @@ class FileList extends Component {
     }
 
     onUploadRequest() {
+        var self = this
         var seletedFile = $("#file-selector").get(0).files[0]
         uploadFile(seletedFile)
             .then(respose => {                
                 var uploadFileUrl = respose.headers.location
-                addTorrent(uploadFileUrl)                
+                return addTorrent(uploadFileUrl)                
             })
+            .then(_ => {                
+                self.loadFileList()
+            })   
             .catch(error => {
                 console.log(error)
             })
     }
 
     requestDownloadProgressPolling() {
-        setTimeout(this.loadFileList.bind(this), 1000)
+        // setTimeout(this.loadFileList.bind(this), 1000)
+    }
+
+    onItemClicked(torrentModel) {        
+        if (torrentModel.status === "Success") {
+            ReactDOM.render(<FolderList hash={torrentModel.hash}/>, document.getElementById('root'));
+        }
+    }
+
+    onItemDeleteClicked(torrentModel) {
+        deleteTorrent(torrentModel.hash).then(this.loadFileList.bind(this))
     }
 }
 export default FileList;
