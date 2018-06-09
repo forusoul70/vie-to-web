@@ -15,8 +15,8 @@ function uploadFile(file) {
     return axios.post('/file', data, null)    
 }
 
-function addTorrent(url) {
-    var data = {fileUri : url}
+function requestByMagent(magnet) {
+    var data = {magnet : magnet}
     return axios.post('/torrent', data, null)
 }
 
@@ -86,7 +86,10 @@ class FileList extends Component {
                             deleteTorrentClickedListener={this.onItemDeleteClicked}/>
                     )}                    
                 </ul>
-                <input type="file" id="file-selector" onChange={this.onUploadRequest.bind(this)}/>   
+                {/* <input type="file" id="file-selector" onChange={this.onUploadRequest.bind(this)}/>    */}
+                <input type="text" id="magnet-text"/>
+                <button type="button" onClick={this.onRequestButtonClicked}>요청</button>
+
             </div>
         )
     }
@@ -115,8 +118,7 @@ class FileList extends Component {
         var seletedFile = $("#file-selector").get(0).files[0]
         uploadFile(seletedFile)
             .then(respose => {                
-                var uploadFileUrl = respose.headers.location
-                return addTorrent(uploadFileUrl)                
+                return respose.headers.location
             })
             .then(_ => {                
                 self.loadFileList()
@@ -138,6 +140,11 @@ class FileList extends Component {
 
     onItemDeleteClicked(torrentModel) {
         deleteTorrent(torrentModel.hash).then(this.loadFileList.bind(this))
+    }
+
+    onRequestButtonClicked() {
+        let magnet = $("#magnet-text")[0]
+        requestByMagent(magnet.value)
     }
 }
 export default FileList;

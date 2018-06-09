@@ -16,8 +16,14 @@
     "eject": "react-scripts eject"
   },
   "proxy": {
-    "/torrent": {"target": "http://localhost:8080"},
-    "/file": {"target": "http://localhost:8080"},
-    "/stream": {"target": "http://localhost:8080"}
+    "/torrent": {
+      "target": "http://localhost:8080"
+    },
+    "/file": {
+      "target": "http://localhost:8080"
+    },
+    "/stream": {
+      "target": "http://localhost:8080"
+    }
   }
 }
