@@ -41,7 +41,7 @@ class FileListItem extends Component {
         if (model.status === "Downloading") {
             description = (            
                 <li onClick={this.props.itemClickedListener.bind(parent, model)}>
-                    <h3>{model.name}</h3> 
+                    <h3 class="Torrent-item-title">{model.name}</h3> 
                     <p>{model.progress}</p>                       
                     {deleteButton}
                 </li>
@@ -49,7 +49,7 @@ class FileListItem extends Component {
         } else {
             description = (            
                 <li onClick={this.props.itemClickedListener.bind(parent, model)}>
-                    <h3>{model.name}</h3> 
+                    <h3 class="Torrent-item-title">{model.name}</h3> 
                     <p>{model.status}</p>                       
                     {deleteButton}
                 </li>
@@ -75,9 +75,8 @@ class FileList extends Component {
         let self = this      
         return (
             <div>
-                <header className="App-header">
-                    <h1>Welcome</h1>
-                </header>
+                <input type="text" id="magnet-text"/>
+                <button type="button" onClick={this.onRequestButtonClicked}>요청</button>
                 <ul className="File-list">
                     {this.state.fileList.map((item) =>                         
                         <FileListItem key={item.id} torrentModel={item} 
@@ -86,10 +85,6 @@ class FileList extends Component {
                             deleteTorrentClickedListener={this.onItemDeleteClicked}/>
                     )}                    
                 </ul>
-                {/* <input type="file" id="file-selector" onChange={this.onUploadRequest.bind(this)}/>    */}
-                <input type="text" id="magnet-text"/>
-                <button type="button" onClick={this.onRequestButtonClicked}>요청</button>
-
             </div>
         )
     }
@@ -129,7 +124,7 @@ class FileList extends Component {
     }
 
     requestDownloadProgressPolling() {
-        // setTimeout(this.loadFileList.bind(this), 1000)
+        setTimeout(this.loadFileList.bind(this), 1000)
     }
 
     onItemClicked(torrentModel) {        

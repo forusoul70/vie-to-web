@@ -1,24 +1,17 @@
-body { 
-    width: 90%;
-    margin: 0 auto;
+.Torrent-item-title {
+    font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
 }
 
-.App-header {
-    background-color: #222;
+li {
+    overflow: auto;
+}
+   
+li:hover {
+    background: #eee;
+    cursor: pointer;
+}
+
+input {
+    margin-top: 15px;
     width: 100%;
-    height: 150px;
-    margin: 0;
-    padding: 20px;
-    color: white;
-}
-
-.File-list {
-
-}
-
-#add-button {
-    color: red;
-    padding: 20px;
-    margin: 20px;
-    width: 100%    
 }
