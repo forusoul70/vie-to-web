@@ -4,6 +4,7 @@ import axios from 'axios'
 import FolderList from './FolderList';
 import './FileList.css';
 import $ from 'jquery';
+import logo from './logo.svg';
 
 function getFileList() {
     return axios.get('/torrent/list')
