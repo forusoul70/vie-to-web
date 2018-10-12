@@ -41,6 +41,7 @@ class FileListItem extends Component {
         if (model.status === "Downloading") {
             description = (            
                 <li onClick={this.props.itemClickedListener.bind(parent, model)}>
+					<img src={logo} alt="logo" />
                     <h3 class="Torrent-item-title">{model.name}</h3> 
                     <p>{model.progress}</p>                       
                     {deleteButton}
@@ -49,6 +50,7 @@ class FileListItem extends Component {
         } else {
             description = (            
                 <li onClick={this.props.itemClickedListener.bind(parent, model)}>
+					<img src={logo} alt="logo" />
                     <h3 class="Torrent-item-title">{model.name}</h3> 
                     <p>{model.status}</p>                       
                     {deleteButton}
@@ -94,8 +96,7 @@ class FileList extends Component {
     }
 
     onLoadFileList(response) {                       
-        var list = response.data
-        console.info(list)
+        var list = response.data        
         this.setState({
             fileList : list
         })
