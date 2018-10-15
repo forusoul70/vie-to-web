@@ -79,7 +79,7 @@ class FileList extends Component {
         return (
             <div>
                 <input type="text" id="magnet-text"/>
-                <button type="button" onClick={this.onRequestButtonClicked}>요청</button>
+                <button type="button" id="request-magnet-button" onClick={this.onRequestButtonClicked}>요청</button>
                 <ul className="File-list">
                     {this.state.fileList.map((item) =>                         
                         <FileListItem key={item.id} torrentModel={item} 
@@ -130,9 +130,9 @@ class FileList extends Component {
     }
 
     onItemClicked(torrentModel) {        
-        if (torrentModel.status === "Success") {
+        // if (torrentModel.status === "Success") {
             ReactDOM.render(<FolderList hash={torrentModel.hash}/>, document.getElementById('root'));
-        }
+        // }
     }
 
     onItemDeleteClicked(torrentModel) {
@@ -141,7 +141,10 @@ class FileList extends Component {
 
     onRequestButtonClicked() {
         let magnet = $("#magnet-text")[0]
-        requestByMagent(magnet.value)
+        var promiss = requestByMagent(magnet.value)
+        promiss.then( res => {
+            alert("" + res.status + " : " + res.statusText);
+        });
     }
 }
 export default FileList;
