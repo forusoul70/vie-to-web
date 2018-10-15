@@ -8,7 +8,7 @@ function queryFolder(hash) {
 }
 
 function redirectViewFile(path) {
-    var location = "/stream/" + path
+    var location = encodeURI("/stream?path=" + path)
     window.location.href = location
 }
 
